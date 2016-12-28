@@ -1,0 +1,83 @@
+## Experiments
+
+- wavelets
+  - 1d --> 2d (all channels combined)
+
+- regression
+  - linear
+  - LASSO
+  - ridge
+- use features from Kaggle winners
+
+Grant deadline: April 26th
+
+
+automatically detect after-discharges
+- are there already formal ways of characterizing ADs?
+
+learn about controllability of nonlinear systems
+- determine if system is controllable
+- add terms to make controllable?
+
+different features
+- use features from Kaggle winners
+- use UKF for better signal estimation before grabbing features
+
+
+## modeling
+- setup model from Wendling + modifications from Connolly
+  - start with 1-NMM, then extend to 2-NMM
+  - start with no stimulation, just modeling
+- UKF for online estimation
+   https://scholar.google.com/scholar?q=kalman&btnG=&hl=en&as_sdt=1%2C11&sciodt=1%2C11&as_ylo=2015&cites=2496729279637930959&scipsc=1
+- fit the model parameters
+- generate plausible synthetic waveforms
+- linear quadratic programming for optimal control of system ??
+   http://www.me.umn.edu/courses/me8281/notes/Old%20S06/Chapter%206%20LQ%20Control.pdf
+
+
+
+- kindling tutorial
+   http://hargreaves.swong.webfactional.com/kindle.htm
+- full pre/post-stimulation recording:
+   https://www.dropbox.com/sh/1kgj5psad1b7f7o/AAB_hm5fcRErYLI6tqY6GmMXa?dl=0
+
+
+## Questions for Mark
+- help deriving ODE
+- why is your S(v) different than Wendling's?
+- why did you choose to put u(t) into v_i(t)
+- how to generate Fig 2 in Wendling2002
+
+
+
+
+
+wavelets, scales=1:6
+ARN035
+>> tic, [cm cls] = nested_cross_validation(psd,lbls(:,2)','linear'); toc, cm, trace(cm)/sum(cm(:))
+Elapsed time is 124.862305 seconds.
+cm =
+    11     4
+     5    23
+ans =
+    0.7907
+
+ARN038
+
+    37     8
+     4     3
+ans =
+      0.7692
+
+ARN035, scales = [1 80], 4 voices  (#1c29919)
+scales = helperCWTTimeFreqVector(1,80,centfrq('morl'),1/fs,4);
+cm =
+    11     4
+     4    24
+
+    0.8140
+
+
+
+cluster: 170.140.232.149
