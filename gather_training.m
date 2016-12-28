@@ -5,11 +5,7 @@ function [x_training y_training] = gather_training(data_struct, biomarker, s_win
 % main argument for this model is a directory consisting of neural
 % recordings extracted from a fixed interval stimulation experiment. The
 % function then calculates the neural state and resulting change in
-% biomarker. This data is then combined with the stimulation parameters and
-% fit to a Gaussian process of the form:
-%
-%           delta_biomarker = f(state, stimulation)
-%
+% biomarker.
 
 
 x_training              = [];
