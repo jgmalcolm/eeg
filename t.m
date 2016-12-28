@@ -1,8 +1,14 @@
 addpath(genpath('~/src/chronux_2_11/spectral_analysis/'))
 addpath(genpath('experiments'))
 
+data = load('data/ARN052_fad_grid_2016_12_20_1_model_data.mat');
+s_window = [1 10];
+window = 0.5;
+offset = 0.1;
+[xx yy] = gather_training(data, 'psd', s_window, window, offset);
 
-exp_trial_gc
+w
+
 return
 
 
