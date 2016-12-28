@@ -1,15 +1,15 @@
-function gp_model = generate_linear_model(data_struct, biomarker, s_window, window, offset)
+function [x_training y_training] = gather_training(data_struct, biomarker, s_window, window, offset)
 
 % This function uses data to generate a model representing a first order
-% difference equation of how stimulation affect different biomarkers. The 
+% difference equation of how stimulation affect different biomarkers. The
 % main argument for this model is a directory consisting of neural
 % recordings extracted from a fixed interval stimulation experiment. The
 % function then calculates the neural state and resulting change in
 % biomarker. This data is then combined with the stimulation parameters and
-% fit to a Gaussian process of the form: 
-%          
+% fit to a Gaussian process of the form:
+%
 %           delta_biomarker = f(state, stimulation)
-% 
+%
 
 
 x_training              = [];
@@ -18,24 +18,24 @@ y_training              = [];
 sampling_frequency      = 2000;
 n_segments              = size(data_struct.model_data,1);
 
-state_offset            = .1;
+state_offset            = .1; % ???
 
 for c1 = 1:size(data_struct.model_data,1)
-    
+
     stimulation_duration    = data_struct.x_data(c1,1);
     stimulation_amplitude   = data_struct.x_data(c1,2);
     stimulation_frequency   = data_struct.x_data(c1,3);
     stimulation_time        = data_struct.time_data(c1,:);
-    
+
     if 1%stimulation_amplitude == 1 %
-            
+
 %         fprintf('Segment: %d/%d\n',c1, n_segments);
 
         data                    = squeeze(data_struct.model_data(c1,:,:));
-       
+
         % extract state segment
         state_segment           = extract_state_segment(data, window, stimulation_time, stimulation_duration, state_offset, sampling_frequency);
-       
+
         % extract effect segment
         effect_segment          = extract_effect_segment(data, window, offset, stimulation_time, stimulation_duration, sampling_frequency);
 
@@ -44,24 +44,14 @@ for c1 = 1:size(data_struct.model_data,1)
 
         % extract effect biomarker
         effect_biomarker        = calculate_biomarker(effect_segment, biomarker, s_window, sampling_frequency);
-        if abs(effect_biomarker / state_biomarker) < 10
-        
-        y_training              = [y_training; effect_biomarker / state_biomarker];               
+        if abs(effect_biomarker / state_biomarker) < 10 % ???
+
+        y_training              = [y_training; effect_biomarker / state_biomarker];
         x_training              = [x_training;  data_struct.x_data(c1,:) ];
         end
     end
 end
 
-% Fit model
-
-gp_model = gp_object;
-gp_model.initialize_data(x_training, y_training);
-gp_model.minimize;
-
-% remove_outliers(outlier_threshold, gp_model)
-
-
-% gp_model.plot_mean
 end
 
 %%%%%%%%%%%%
@@ -81,7 +71,7 @@ end
 function state_segment = extract_state_segment(data, window, stimulation_time, stimulation_duration, offset, sampling_frequency)
 
 if window == 0
-   window = stimulation_duration; 
+   window = stimulation_duration;
 end
 
 segment_start_index = floor((stimulation_time-window-offset)*sampling_frequency);
@@ -99,7 +89,7 @@ end
 function effect_segment = extract_effect_segment(data, window, offset,  stimulation_time, stimulation_duration, sampling_frequency)
 
 if window == 0;
-    window = stimulation_duration; 
+    window = stimulation_duration;
 end
 
 segment_start_index = floor((stimulation_time+stimulation_duration+offset)*sampling_frequency);
@@ -117,7 +107,7 @@ end
 function [biomarker_value] = calculate_biomarker(data, biomarker, s_window, sampling_frequency)
 
 switch biomarker(1:3)
-    
+
     case 'psd'
         [biomarker_value] = calculate_power_biomarker(data, biomarker, s_window, sampling_frequency);
     case 'coh'
@@ -153,7 +143,7 @@ end
 
 
 function biomarker_value = calculate_line_length_biomarker(data)
-    
+
 biomarker_value = mean(sum(abs(diff(data(5:8, :)'))));
 
 end
@@ -165,7 +155,7 @@ end
 function biomarker = calculate_coherence_biomarker(data, biomarker, sampling_frequency)
 
 switch biomarker
-    
+
     case 'coh_theta'
         fpass = 4:.1:7;
     case 'coh_gamma'
@@ -206,5 +196,3 @@ q   =a/6;
 biomarker = q';
 
 end
-
-
