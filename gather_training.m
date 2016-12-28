@@ -44,11 +44,9 @@ for c1 = 1:size(data_struct.model_data,1)
 
         % extract effect biomarker
         effect_biomarker        = calculate_biomarker(effect_segment, biomarker, s_window, sampling_frequency);
-        if abs(effect_biomarker / state_biomarker) < 10 % ???
 
         y_training              = [y_training; effect_biomarker / state_biomarker];
         x_training              = [x_training;  data_struct.x_data(c1,:) ];
-        end
     end
 end
 
