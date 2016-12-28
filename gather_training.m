@@ -27,27 +27,22 @@ for c1 = 1:size(data_struct.model_data,1)
     stimulation_frequency   = data_struct.x_data(c1,3);
     stimulation_time        = data_struct.time_data(c1,:);
 
-    if 1%stimulation_amplitude == 1 %
+    data                    = squeeze(data_struct.model_data(c1,:,:));
 
-%         fprintf('Segment: %d/%d\n',c1, n_segments);
+    % extract state segment
+    state_segment           = extract_state_segment(data, window, stimulation_time, stimulation_duration, state_offset, sampling_frequency);
 
-        data                    = squeeze(data_struct.model_data(c1,:,:));
+    % extract effect segment
+    effect_segment          = extract_effect_segment(data, window, offset, stimulation_time, stimulation_duration, sampling_frequency);
 
-        % extract state segment
-        state_segment           = extract_state_segment(data, window, stimulation_time, stimulation_duration, state_offset, sampling_frequency);
+    % extract_state_biomarker
+    state_biomarker         = calculate_biomarker(state_segment, biomarker, s_window, sampling_frequency);
 
-        % extract effect segment
-        effect_segment          = extract_effect_segment(data, window, offset, stimulation_time, stimulation_duration, sampling_frequency);
+    % extract effect biomarker
+    effect_biomarker        = calculate_biomarker(effect_segment, biomarker, s_window, sampling_frequency);
 
-        % extract_state_biomarker
-        state_biomarker         = calculate_biomarker(state_segment, biomarker, s_window, sampling_frequency);
-
-        % extract effect biomarker
-        effect_biomarker        = calculate_biomarker(effect_segment, biomarker, s_window, sampling_frequency);
-
-        y_training              = [y_training; effect_biomarker / state_biomarker];
-        x_training              = [x_training;  data_struct.x_data(c1,:) ];
-    end
+    y_training              = [y_training; effect_biomarker / state_biomarker];
+    x_training              = [x_training;  data_struct.x_data(c1,:) ];
 end
 
 end
