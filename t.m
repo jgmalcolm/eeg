@@ -1,13 +1,22 @@
+clear
 addpath(genpath('~/src/chronux_2_11/spectral_analysis/'))
 addpath(genpath('experiments'))
 
 data = load('data/ARN052_fad_grid_2016_12_20_1_model_data.mat');
-s_window = [1 10];
+biomarker = 'psd';
+s_window = [1 50];
 window = 0.5;
 offset = 0.1;
-[xx yy] = gather_training(data, 'psd', s_window, window, offset);
+[xx yy] = gather_training(data, biomarker, s_window, window, offset);
 
 w
+
+% 1. when/where to look to see an effect?
+%  - psd over which frequencies?  (s_window)
+%  - psd over what time window? (window)
+%  - grab window how soon after stimulation? (offset)
+
+% 2. which stimulation parameters have most effect?
 
 return
 
