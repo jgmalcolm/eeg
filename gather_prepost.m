@@ -11,44 +11,33 @@ function [pre post] = gather_prepost(data_struct, freqs, window, offset)
 % window: how many seconds to consider as window
 % offset: how soon after end of stimulation to grab window
 
-ds = 2000; % Hz
-state_offset = .1; % time between end of pre-stim window and start of stim (seconds)
-biomarker = 'psd';
+  ds = 2000; % Hz
+  state_offset = .1; % time between end of pre-stim window and start of stim (seconds)
+  biomarker = 'psd';
 
-for c1 = 1:size(data_struct.model_data,1)
+  for c1 = 1:size(data_struct.model_data,1)
 
-    stimulation_duration    = data_struct.x_data(c1,1);
-    stimulation_amplitude   = data_struct.x_data(c1,2);
-    stimulation_frequency   = data_struct.x_data(c1,3);
-    stimulation_time        = data_struct.time_data(c1,:);
-
-    data                    = squeeze(data_struct.model_data(c1,:,:));
+    stim_duration  = data_struct.x_data(c1,1);
+    stim_amplitude = data_struct.x_data(c1,2);
+    stim_frequency = data_struct.x_data(c1,3);
+    stim_time      = data_struct.time_data(c1,:);
 
     % extract segments
-    [state_segment pre]     = extract_state_segment(data, window, stimulation_time, stimulation_duration, state_offset, ds);
-    [effect_segment post]   = extract_effect_segment(data, window, offset, stimulation_time, stimulation_duration, ds);
+    signal = squeeze(data_struct.model_data(c1,:,:));
+    spre  = extract_state_segment(signal, window, stim_time, stim_duration, state_offset, ds);
+    spost = extract_effect_segment(signal, window, offset, stim_time, stim_duration, ds);
 
     % calculate biomarker
-    state_biomarker         = calculate_biomarker(state_segment, biomarker, freqs, ds);
-    effect_biomarker        = calculate_biomarker(effect_segment, biomarker, freqs, ds);
-end
+    bio_pre = calculate_biomarker(spre, biomarker, freqs, ds);
+    bio_post = calculate_biomarker(spost, biomarker, freqs, ds);
+  end
 
 end
 
-%%%%%%%%%%%%
-%
-%
-%
-%%%%%%%%%%%%
-function remove_outliers(threshold, gp_model)
 
-end
 
-%%%%%%%%%%%%
-%
-%
-%
-%%%%%%%%%%%%
+
+
 function state_segment = extract_state_segment(data, window, stimulation_time, stimulation_duration, offset, sampling_frequency)
 
 if window == 0
