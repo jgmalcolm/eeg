@@ -19,7 +19,7 @@ y_training              = [];
 sampling_frequency      = 2000;
 n_segments              = size(data_struct.model_data,1);
 
-state_offset            = .1; % ???
+state_offset            = .1; % time between end of pre-stim window and start of stim (seconds)
 
 for c1 = 1:size(data_struct.model_data,1)
 
