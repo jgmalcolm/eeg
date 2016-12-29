@@ -8,6 +8,11 @@ function [x_training y_training] = gather_training(data_struct, biomarker, s_win
 % biomarker.
 
 
+% biomarker: psd (power), coh (coherence), lin (line length)
+% s_window: frequency range [min max]
+% window: how many seconds to consider as window
+% offset: how soon after end of stimulation to grab window
+
 x_training              = [];
 y_training              = [];
 
