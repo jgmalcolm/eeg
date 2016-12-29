@@ -123,7 +123,7 @@ params.Fs       = sampling_frequency;
 params.tapers   = [3 4];
 params.fpass    = s_window;
 
-data            = (data - repmat(mean(data,2),1, size(data,2)));% ./ repmat(std(data,[],2), 1, size(data,2));
+data            = (data - repmat(mean(data,2),1, size(data,2)));% ./ repmat(std(data,[],2), 1, size(data,2)); % ???
 [S, ~]          = mtspectrumc(data',params);
 
 
