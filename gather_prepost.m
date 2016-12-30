@@ -94,8 +94,9 @@ params.Fs       = ds;
 params.tapers   = [3 4];
 params.fpass    = freqs;
 
-data            = (data - repmat(mean(data,2),1, size(data,2)));% ./ repmat(std(data,[],2), 1, size(data,2)); % ???
-[S, ~]          = mtspectrumc(data',params);
+% data            = (data - repmat(mean(data,2),1, size(data,2)));% ./ repmat(std(data,[],2), 1, size(data,2)); % ???
+data = zscore(data,0,2);
+[S, ~] = mtspectrumc(data',params);
 
 
 if size(S,2) == 1
