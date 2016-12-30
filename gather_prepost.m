@@ -38,16 +38,13 @@ end
 
 
 
-function state_segment = extract_state_segment(data, window, stimulation_time, stimulation_duration, offset, sampling_frequency)
+function [state_segment idx] = extract_state_segment(data, window, stimulation_time, stimulation_duration, offset, sampling_frequency)
 
-if window == 0
-   window = stimulation_duration;
-end
+  segment_start_index = floor((stimulation_time-window-offset)*sampling_frequency);
+  segment_end_index   = segment_start_index + floor(window*sampling_frequency);
 
-segment_start_index = floor((stimulation_time-window-offset)*sampling_frequency);
-segment_end_index   = segment_start_index + floor((window-offset)*sampling_frequency);
-
-state_segment       = data(:, segment_start_index:segment_end_index);
+  idx = segment_start_index:segment_end_index;
+  state_segment       = data(:, idx);
 
 end
 
@@ -56,16 +53,13 @@ end
 %
 %
 %%%%%%%%%%%%
-function effect_segment = extract_effect_segment(data, window, offset,  stimulation_time, stimulation_duration, sampling_frequency)
-
-if window == 0;
-    window = stimulation_duration;
-end
+function [effect_segment idx] = extract_effect_segment(data, window, offset,  stimulation_time, stimulation_duration, sampling_frequency)
 
 segment_start_index = floor((stimulation_time+stimulation_duration+offset)*sampling_frequency);
 segment_end_index   = segment_start_index + floor(window*sampling_frequency);
 
-effect_segment      = data(:, segment_start_index:segment_end_index);
+idx = segment_start_index:segment_end_index;
+effect_segment      = data(:, idx);
 
 end
 
