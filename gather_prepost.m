@@ -117,6 +117,13 @@ function biomarker_value = calculate_line_length_biomarker(data)
 biomarker_value = mean(sum(abs(diff(data(5:8, :)'))));
 
 end
+
+
+function biomarker = calculate_xcorr_biomarker(data)
+% @(x,y) max(abs(xcorr(x,y))) / (norm(x,2)*norm(y,2))
+end
+
+
 %%%%%%%%%%%%
 %
 %
