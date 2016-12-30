@@ -1,4 +1,4 @@
-function [pre post] = gather_prepost(data_struct, freqs, window, offset)
+function [Spre Spost] = gather_prepost(data_struct, freqs, window, offset)
 
 % data_struct
 %   - x_data = [dur amp freq]
@@ -13,23 +13,24 @@ function [pre post] = gather_prepost(data_struct, freqs, window, offset)
 
   ds = 2000; % Hz
   state_offset = .1; % time between end of pre-stim window and start of stim (seconds)
-  biomarker = 'psd';
 
-  for c1 = 1:size(data_struct.model_data,1)
+  nsamples = size(data_struct.model_data,1);
+  [Spre Spost] = deal(zeros(0,0,0));
 
-    stim_duration  = data_struct.x_data(c1,1);
-    stim_amplitude = data_struct.x_data(c1,2);
-    stim_frequency = data_struct.x_data(c1,3);
-    stim_time      = data_struct.time_data(c1,:);
+  for i = 1:nsamples
+    stim_duration  = data_struct.x_data(i,1);
+    stim_amplitude = data_struct.x_data(i,2);
+    stim_frequency = data_struct.x_data(i,3);
+    stim_time      = data_struct.time_data(i,:);
 
     % extract segments
-    signal = squeeze(data_struct.model_data(c1,:,:));
-    spre  = extract_state_segment(signal, window, stim_time, stim_duration, state_offset, ds);
-    spost = extract_effect_segment(signal, window, offset, stim_time, stim_duration, ds);
+    signal = squeeze(data_struct.model_data(i,:,:));
+    [spre preidx] = extract_state_segment(signal, window, stim_time, stim_duration, state_offset, ds);
+    [spost postidx] = extract_effect_segment(signal, window, offset, stim_time, stim_duration, ds);
+    assert(isequal(size(spre),size(spost)))
 
-    % calculate biomarker
-    bio_pre = calculate_biomarker(spre, biomarker, freqs, ds);
-    bio_post = calculate_biomarker(spost, biomarker, freqs, ds);
+    Spre(:,:,i) = spre;
+    Spost(:,:,i) = spost;
   end
 
 end
