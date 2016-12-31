@@ -9,6 +9,8 @@ all: $(BIN).$(MEXT)
 	mex -silent -output $@ $^
 
 
+#CC='gcc' CXX='g++' LD='gcc' LDFLAGS='-fopenmp'
+
 .PHONY: clean
 clean:
-	rm -f $(BIN).$(MEXT) *.o
+	rm -f $(BIN).$(MEXT)
