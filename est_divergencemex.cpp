@@ -31,6 +31,7 @@ void mexFunction(int nlhs, mxArray *plhs[],
     mwSize pts = 0;
     double acc = 0;
 
+#pragma omp parallel for reduction(+ : acc, pts)
     for (mwSize i = 0; i < nx; i++) {
         const double *x = X + nch*i;
 
