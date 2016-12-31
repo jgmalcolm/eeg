@@ -1,4 +1,4 @@
-function [Spre Spost] = gather_prepost(data_struct, freqs, window, offset)
+function [Spre Spost] = gather_prepost(data_struct, window, offset)
 
 % data_struct
 %   - x_data = [dur amp freq]
@@ -7,7 +7,6 @@ function [Spre Spost] = gather_prepost(data_struct, freqs, window, offset)
 % stim_time: time points of stimulation (seconds)
 % stim_params: [dur amp freq]
 % signal: multi-channel signal (channels * time)
-% freqs: frequency range [min max]
 % window: how many seconds to consider as window
 % offset: how soon after end of stimulation to grab window
 
