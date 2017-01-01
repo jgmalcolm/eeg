@@ -5,11 +5,11 @@ BIN := est_divergencemex
 all: $(BIN).$(MEXT)
 
 
-%.$(MEXT) : %.cpp
-	mex -silent -output $@ $^
+%.$(MEXT) : %.o
+	mex -silent -output $@ $^ LD='gcc-6' CC='gcc-6' LDFLAGS='-fopenmp \$$LDFLAGS'
 
-
-#CC='gcc' CXX='g++' LD='gcc' LDFLAGS='-fopenmp'
+%.o : %.cpp
+	g++-6 -fopenmp -o $@ -c $^ -I/usr/local/matlab/extern/include
 
 .PHONY: clean
 clean:
