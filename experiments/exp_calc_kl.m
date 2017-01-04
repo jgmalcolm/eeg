@@ -1,8 +1,7 @@
-% data = loadcached('data/ARN053_fad_grid_model_data');
-data = loadcached('data/ARN052_fad_grid_2016_12_20_1_model_data');
+function kl = exp_calc_kl(data, windows, offsets)
 
-offsets = 0:.1:2;   noffsets = numel(offsets);
-windows = 0.1:0.1:1.5;  nwindows = numel(windows);
+noffsets = numel(offsets);
+nwindows = numel(windows);
 kl = table();
 for i = 1:nwindows
   window = windows(i);

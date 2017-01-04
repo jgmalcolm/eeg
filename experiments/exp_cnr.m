@@ -1,7 +1,4 @@
-clear
-
-KL = loadcached('divergence');
-BG = loadcached('divergence_bg');
+function exp_cnr(KL, BG)
 
 windows = unique(KL.Window);  nwindows = numel(windows);
 offsets = unique(KL.Offset);  noffsets = numel(offsets);

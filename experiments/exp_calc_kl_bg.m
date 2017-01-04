@@ -1,7 +1,6 @@
-% data = loadcached('data/ARN053_fad_grid_model_data');
-data = loadcached('data/ARN052_fad_grid_2016_12_20_1_model_data');
+function bg = exp_calc_kl_bg(data, windows)
 
-windows = 0.1:0.1:1.5;  nwindows = numel(windows);
+nwindows = numel(windows);
 nsamples = length(data.time_data);
 offset = 0; % post-stim offset does not matter
 bg = table();
