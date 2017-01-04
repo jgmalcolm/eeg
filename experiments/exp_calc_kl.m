@@ -12,7 +12,7 @@ for i = 1:nwindows
       div = est_divergence(Spre(:,:,sample), Spost(:,:,sample));
       kl = [kl; table(sample, window, offset, div)];
     end
-    fprintf('progress %.0f%%\n', ((i-1)*noffsets + j)/(noffsets*nwindows)*100)
+    fprintf('%s %.0f%%\n', mfilename, ((i-1)*noffsets + j)/(noffsets*nwindows)*100)
   end
 end
 vars = {'Sample' 'Window' 'Offset' 'Divergence'};

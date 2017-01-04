@@ -22,7 +22,7 @@ for i = 1:nwindows
   mu = Ex;
   st = sqrt(Exx - Ex^2);
   bg = [bg; table(window, mu, st)]
-  fprintf('progress %.0f%%\n', i/nwindows*100)
+  fprintf('%s %.0f%%\n', mfilename, i/nwindows*100)
 end
 vars = {'Window' 'Mean' 'Std'};
 bg.Properties.VariableNames = vars;
