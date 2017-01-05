@@ -1,24 +1,44 @@
 clear
 addpath(genpath('~/src/chronux_2_11/spectral_analysis/'))
-addpath(genpath('experiments'))
+addpath(genpath('experiments/'))
 
-data = load('data/ARN052_fad_grid_2016_12_20_1_model_data.mat');
-biomarker = 'psd';
-s_window = [1 50];
-window = 0.5;
-offset = 0.1;
-[xx yy] = gather_training(data, biomarker, s_window, window, offset);
+% data = loadcached('data/ARN053_fad_grid_model_data');
+% data = loadcached('data/ARN052_fad_grid_2016_12_20_1_model_data');
+data = loadcached('data/ARN052_admets_grid_model_data');
 
-w
+offsets = 0:.1:2;
+windows = 0.1:0.1:1.5;
 
-% 1. when/where to look to see an effect?
-%  - psd over which frequencies?  (s_window)
-%  - psd over what time window? (window)
-%  - grab window how soon after stimulation? (offset)
+tic
+kl = exp_calc_kl(data, windows, offsets);
+save('data/ARN052_admets_grid_model_data_divergence','kl')
+toc
 
-% 2. which stimulation parameters have most effect?
+tic
+bg = exp_calc_kl_bg(data, windows);
+save('data/ARN052_admets_grid_model_data_divergence_bg','bg')
+toc
 
+exp_cnr(kl,bg)
+
+% exp_cnr
+% return
 return
+
+clf
+kl = loadcached('divergence');
+kl = kl(kl.Sample == 1,:);
+offsets = unique(kl.Offset);   noffsets = numel(offsets);
+windows = unique(kl.Window);   nwindows = numel(windows);
+K = reshape(kl.Divergence, noffsets, nwindows);
+surf(windows, offsets, K)
+xlabel('window')
+ylabel('offset')
+zlabel('divergence')
+set(gca,'FontSize',24)
+return
+
+
 
 
 
